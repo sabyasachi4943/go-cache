@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+const SIZE = 5
 type Node struct {
 	Val string
 	Left *Node
@@ -60,6 +61,39 @@ func (c *Cache) Remove(n *Node) *Node {
 	return n 
 }
 
+
+func (c *Cache) Add(n *Node) {
+	fmt.Printf("add: %s\n", n.Val)
+	tmp := c.Queue.Head.Right
+
+	c.Queue.Head.Right = n
+	n.Left = c.Queue.Head
+	n.Right = tmp
+	tmp.Left = n
+
+	c.Queue.Length++
+	if c.Queue.Length > SIZE {
+		c.Remove(c.Queue.Tail.Left)
+	}
+}
+
+func (c *Cache) Display(){
+	c.Queue.Display()
+}
+
+
+func (q *Queue) Display(){
+	node := q.Head.Right
+	fmt.Printf("%d - [", q.Length)
+	for i := 0; i < q.Length; i++ {
+		fmt.Printf("{%s}", node.Val)
+		if i < q.Length -1 {
+			fmt.Printf("<-->")
+		}
+		node = node.Right
+	}
+	fmt.Println("]")
+}
 
 
 func main() {
